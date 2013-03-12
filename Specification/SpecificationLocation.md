@@ -1,12 +1,14 @@
 # Specification of location descriptor #
 
-## Introduction ##
+Introduction
+------------------------
 
 This document aims to exhaustively describe Multiple Unit target addressing, and, in a more generic point of view, how to address a multiple Targetting environment.
 
 Solution proposal shall adress teams usages and points of view, allowing some customization without breaking compatibility.
 
-## Identified usages ##
+Identified usages
+------------------------
 
 In order to simplify comparison, we use a standardized train configuration, made with following equipments:
  * MPU1;
@@ -73,10 +75,52 @@ Testbenches environments are configured to handle ***only partially*** one unit 
 
 As one unit is partially represented, these are splitted through testbenches. Split of environment is performed in order to have almost equal load on every testbench. Actually, environment of other sections are simulated with a basic environment (usually, some interfaces, and basic functions), so that only one testbench is required for other sections.
 
-Target to address | Physical equipment             | path to address                      | Nickname usage
------------------ | ------------------------------ | ------------------------------------ | ------------------
-Unit1/ENV_CAR_A   | Testbench1 for car A of Unit 1 | /path/to/my/variable/inside/software | #VariableNickname
-Unit1/ENV_CAR_B   | Testbench2 for car B of Unit 1 | /path/to/my/variable/inside/software | #VariableNickname
-Unit2/ENV         | Testbench3 for Unit 2          | /path/to/my/variable/inside/software | #VariableNickname
-Unit3/ENV         | Testbench4 for Unit 3          | /path/to/my/variable/inside/software | #VariableNickname
-Unit4/ENV         | Testbench5 for Unit 4          | /path/to/my/variable/inside/software | #VariableNickname
+Target to address | Physical equipment             | path to address                       | Nickname usage
+----------------- | ------------------------------ | ------------------------------------- | ------------------
+Unit1/ENV         | Testbench1 for car A of Unit 1 | /path1/to/my/variable/inside/software | #VariableNickname
+Unit1/ENV         | Testbench2 for car B of Unit 1 | /path2/to/my/variable/inside/software | #VariableNickname
+Unit2/ENV         | Testbench3 for Unit 2          | /path/to/my/variable/inside/software  | #VariableNickname
+Unit3/ENV         | Testbench4 for Unit 3          | /path/to/my/variable/inside/software  | #VariableNickname
+Unit4/ENV         | Testbench5 for Unit 4          | /path/to/my/variable/inside/software  | #VariableNickname
+
+Synthesis
+--------------------------------------------
+
+Usages are clearly different from one team to another. As a generic rule, three cases must by differentiated. These are presented hereafter.
+
+### Main case ###
+
+Most used configuration is also the simplest configuration. It consists of a ONE-TO-ONE association : one testbench computer is holding only one environment. 
+
+It is also usefull to to note that in the case of ***Reichshoffen***, this scheme is also applicable, but just for trailer units (e.g. units 1, 2, 3).
+
+### Specific cases ###
+
+#### One unit to many testbenches association ####
+
+Although no examples are available, it can be expected following two processes:
+ 1. ***Explicit adressing :*** Name of environment is specified through its name a ONE-TO-ONE association : for example {{{Unit1/ENV_CAR_A}}} is adressing TestBench 1, simulating CAR A of unit 1.
+ 2. ***Implicit adressing :*** Name of environment can lead to variables on several testbenches. As a consequence, a second discriminator is used : {{{path}}} in the case of a variable, {{{nickname}}} in case of nickname variable.
+ 
+ #### Many units to one testbench association ####
+
+Following two processes can be expected:
+ 1. ***Explicit adressing :*** Environment name and exact path/nickname are specified. In this case, no more processes are needed, because variables can be differentiated.
+ 2. ***Implicit adressing :*** Environment name and a partial path/nickname is specified, in order to not have to change path/nickname because of environment. Path or nickname is recreated through specific rules.
+ 
+Specification
+------------------------------------------
+
+### Requirements ###
+
+Based on synthesis, following requirements are applicable:
+ 1. Unit configuration can be specified unit per unit;
+ 2. Unit configuration can handle three following associations:
+    * One to One testbench association
+    * One unit to many testbenches association : both explicit adressing and implicit adressing shall be handled.
+	* Multiple unit to one testbench association : both explicit adressing and implicit adressing shall be handled.
+ 3. Configuration of real equipments are also defined, because it is possible to access equipments through multiple systems : TrainTracer and ControlBuild
+	
+### Proposal ####
+
+Configuration can be done through a XML file.
