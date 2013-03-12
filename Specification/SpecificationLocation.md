@@ -1,4 +1,5 @@
-# Specification of location descriptor #
+Specification of location descriptor
+=========================================
 
 Introduction
 ------------------------
@@ -99,14 +100,14 @@ It is also usefull to to note that in the case of ***Reichshoffen***, this schem
 #### One unit to many testbenches association ####
 
 Although no examples are available, it can be expected following two processes:
- 1. ***Explicit adressing :*** Name of environment is specified through its name a ONE-TO-ONE association : for example {{{Unit1/ENV_CAR_A}}} is adressing TestBench 1, simulating CAR A of unit 1.
- 2. ***Implicit adressing :*** Name of environment can lead to variables on several testbenches. As a consequence, a second discriminator is used : {{{path}}} in the case of a variable, {{{nickname}}} in case of nickname variable.
+ 1. ***Explicit adressing :*** Name of environment is specified through its name a ONE-TO-ONE association : for example *Unit1/ENV_CAR_A* is adressing TestBench 1, simulating CAR A of unit 1.
+ 2. ***Implicit adressing :*** Name of environment can lead to variables on several testbenches. As a consequence, a second discriminator is used : *path* in the case of a variable, *nickname* in case of nickname variable.
  
- #### Many units to one testbench association ####
+#### Many units to one testbench association ####
 
 Following two processes can be expected:
  1. ***Explicit adressing :*** Environment name and exact path/nickname are specified. In this case, no more processes are needed, because variables can be differentiated.
- 2. ***Implicit adressing :*** Environment name and a partial path/nickname is specified, in order to not have to change path/nickname because of environment. Path or nickname is recreated through specific rules.
+ 2. ***Implicit adressing :*** Environment name and a partial path/nickname is specified, in order to not have to change path/nickname because of environment. *Path* or *nickname* is recreated through specific rules.
  
 Specification
 ------------------------------------------
@@ -119,7 +120,7 @@ Based on synthesis, following requirements are applicable:
     * One to One testbench association
     * One unit to many testbenches association : both explicit adressing and implicit adressing shall be handled.
 	* Multiple unit to one testbench association : both explicit adressing and implicit adressing shall be handled.
- 3. Configuration of real equipments are also defined, because it is possible to access equipments through multiple systems : TrainTracer and ControlBuild
+ 3. Configuration of real equipments are also defined, because it is possible to access equipments through multiple systems : *TrainTracer* and *ControlBuild*
 	
 ### Proposal ####
 
