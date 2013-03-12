@@ -124,4 +124,44 @@ Based on synthesis, following requirements are applicable:
 	
 ### Proposal ####
 
-Configuration can be done through a XML file.
+Configuration can be done through following XML file:
+
+```XML
+<Configuration>
+  <UnitDefinitions>
+    <Unit name="Section1/ENV" strategy="SingleUnitToMultipleTestBenches">
+		<RegexMatch testbenchConfig="TB1">^/Section1/CarA/</RegexMatch>
+		<RegexMatch testbenchConfig="TB2">^/Section1/CarB/</RegexMatch>
+		<RegexMatch testbenchConfig="TB2">*</RegexMatch>
+	</Unit>
+	<Unit name="Section2/ENV" strategy="SingleUnitToSingleTestBench" testbenchConfig="TB1" />
+	<Unit name="Section3/ENV" strategy="MultipleUnitsToSingleTestBench" testbenchConfig="TB3">
+		<PathRewriter>
+			<RegexMatch>^/SectionX/</RegexMatch>
+			<RegexReplace>/Section1/</RegexReplace>
+		</PathRewriter>
+		<NicknameRewriter>
+			<RegexMatch>^</RegexMatch>
+			<RegexReplace>SECTION1_</RegexReplace>			
+		</NicknameRewriter>
+	</Unit>
+	<Unit name="Section4/ENV" strategy="MultipleUnitsToSingleTestBench" testbenchConfig="TB3">
+		<PathRewriter>
+			<RegexMatch>^/SectionX/</RegexMatch>
+			<RegexReplace>/Section2/</RegexReplace>
+		</PathRewriter>
+		<NicknameRewriter>
+			<RegexMatch>^</RegexMatch>
+			<RegexReplace>SECTION2_</RegexReplace>			
+		</NicknameRewriter>
+	</Unit>
+  </UnitDefinitions>
+  <TestBenchDefinitions>
+    <TestBench name="TB1" testStandIdentifier="Fileglobals.env1" hostAddress="192.168.1.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<TestBench name="TB2" testStandIdentifier="Fileglobals.env2" hostAddress="192.168.2.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<TestBench name="TB3" testStandIdentifier="Fileglobals.env3" hostAddress="192.168.3.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<TestBench name="TB4" testStandIdentifier="Fileglobals.env4" hostAddress="192.168.4.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<TestBench name="TB5" testStandIdentifier="Fileglobals.env5" hostAddress="192.168.5.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+  </TestBenchDefinitions>
+</Configuration>
+```
