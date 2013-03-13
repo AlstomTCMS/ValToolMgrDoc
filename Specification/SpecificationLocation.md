@@ -127,41 +127,62 @@ Based on synthesis, following requirements are applicable:
 Configuration can be done through following XML file:
 
 ```XML
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE Configuration SYSTEM "configuration-1.dtd">
 <Configuration>
-  <UnitDefinitions>
-    <Unit name="Section1/ENV" strategy="SingleUnitToMultipleTestBenches">
-		<RegexMatch testbenchConfig="TB1">^/Section1/CarA/</RegexMatch>
-		<RegexMatch testbenchConfig="TB2">^/Section1/CarB/</RegexMatch>
-		<RegexMatch testbenchConfig="TB2">*</RegexMatch>
-	</Unit>
-	<Unit name="Section2/ENV" strategy="SingleUnitToSingleTestBench" testbenchConfig="TB1" />
-	<Unit name="Section3/ENV" strategy="MultipleUnitsToSingleTestBench" testbenchConfig="TB3">
+  <LocationDefinitions>
+    <Location name="Section1/ENV" strategy="SingleUnitToMultipleTestBenches">
+		<PathsDispatcher>
+			<RegexMatch targetConfig="TB1_CARA">^/Section1/CarA/</RegexMatch>
+			<RegexMatch targetConfig="TB2_CARB">^/Section1/CarB/</RegexMatch>
+			<RegexMatch targetConfig="TB2_CARB">*</RegexMatch>		
+		</PathsDispatcher>
+		<NicknamesDispatcher>
+			<RegexMatch targetConfig="TB1_CARA">_VEHA$</RegexMatch>
+			<RegexMatch targetConfig="TB2_CARB">_VEHB$</RegexMatch>
+			<RegexMatch targetConfig="TB2_CARB">*</RegexMatch>		
+		</NicknamesDispatcher>
+	</Location>
+	<Location name="Section2/ENV" strategy="SingleUnitToSingleTestBench" targetConfig="TB3" />
+	<Location name="Section3/ENV" strategy="MultipleUnitsToSingleTestBench" targetConfig="TB4">
 		<PathRewriter>
-			<RegexMatch>^/SectionX/</RegexMatch>
-			<RegexReplace>/Section1/</RegexReplace>
+			<Regex>
+				<Match>^/SectionX/</Match>
+				<Replace>/Section1/</Replace>
+			</Regex>
 		</PathRewriter>
 		<NicknameRewriter>
-			<RegexMatch>^</RegexMatch>
-			<RegexReplace>SECTION1_</RegexReplace>			
+			<Regex>
+				<Match>^(.*)</Match>
+				<Replace>SECTION1_$1</Replace>
+			</Regex>	
 		</NicknameRewriter>
-	</Unit>
-	<Unit name="Section4/ENV" strategy="MultipleUnitsToSingleTestBench" testbenchConfig="TB3">
+	</Location>
+	<Location name="Section4/ENV" strategy="MultipleUnitsToSingleTestBench" targetConfig="TB5">
 		<PathRewriter>
-			<RegexMatch>^/SectionX/</RegexMatch>
-			<RegexReplace>/Section2/</RegexReplace>
+			<Regex>
+				<Match>^/SectionX/</Match>
+				<Replace>/Section2/</Replace>
+			</Regex>
 		</PathRewriter>
 		<NicknameRewriter>
-			<RegexMatch>^</RegexMatch>
-			<RegexReplace>SECTION2_</RegexReplace>			
+			<Regex>
+				<Match>^(.*)</Match>
+				<Replace>SECTION2_$1</Replace>
+			</Regex>	
 		</NicknameRewriter>
-	</Unit>
-  </UnitDefinitions>
-  <TestBenchDefinitions>
-    <TestBench name="TB1" testStandIdentifier="Fileglobals.env1" hostAddress="192.168.1.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
-	<TestBench name="TB2" testStandIdentifier="Fileglobals.env2" hostAddress="192.168.2.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
-	<TestBench name="TB3" testStandIdentifier="Fileglobals.env3" hostAddress="192.168.3.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
-	<TestBench name="TB4" testStandIdentifier="Fileglobals.env4" hostAddress="192.168.4.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
-	<TestBench name="TB5" testStandIdentifier="Fileglobals.env5" hostAddress="192.168.5.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
-  </TestBenchDefinitions>
+	</Location>
+  </LocationDefinitions>
+  <TargetDefinitions>
+    <Target name="Section1/MPU" targetProtocol="TrainTracer">
+	<Target name="Section2/MPU" targetProtocol="TrainTracer">
+	<Target name="Section3/MPU" targetProtocol="TrainTracer">
+	<Target name="Section4/MPU" targetProtocol="TrainTracer">
+    <Target name="TB1_CARA" testStandIdentifier="Fileglobals.env1" targetProtocol="ControBuild" hostAddress="192.168.1.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<Target name="TB2_CARB" testStandIdentifier="Fileglobals.env2" targetProtocol="ControBuild" hostAddress="192.168.2.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<Target name="TB3" testStandIdentifier="Fileglobals.env3" targetProtocol="ControBuild" hostAddress="192.168.3.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<Target name="TB4" testStandIdentifier="Fileglobals.env4" targetProtocol="ControBuild" hostAddress="192.168.4.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+	<Target name="TB5" testStandIdentifier="Fileglobals.env5" targetProtocol="ControBuild" hostAddress="192.168.5.1" remoteSeqPath="c:\init.seq" remoteSeqName="ENV_INIT" />
+  </TargetDefinitions>
 </Configuration>
 ```
